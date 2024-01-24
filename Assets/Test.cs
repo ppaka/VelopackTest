@@ -13,9 +13,10 @@ public class Test : MonoBehaviour
     
     private static async Task UpdateMyApp()
     {
-        var mgr = new UpdateManager("https://the.place/you-host/updates");
+        var mgr = new UpdateManager("https://github.com/ppaka/VelopackTest/releases/latest");
 
         // check for new version
+        Debug.Log("Checking");
         var newVersion = await mgr.CheckForUpdatesAsync();
         if (newVersion == null)
         {
@@ -24,9 +25,11 @@ public class Test : MonoBehaviour
         }
 
         // download new version
+        Debug.Log("Downloading");
         await mgr.DownloadUpdatesAsync(newVersion);
 
         // install new version and restart app
+        Debug.Log("Restarting");
         mgr.ApplyUpdatesAndRestart();
     }
 }
