@@ -22,7 +22,7 @@ public class Test : MonoBehaviour
     {
         Debug.Log(Application.version);
         versionText.SetText(Application.version);
-        _mgr = new UpdateManager("https://github.com/ppaka/VelopackTest/releases/latest");
+        _mgr = new UpdateManager("https://github.com/ppaka/VelopackTest/releases/latest/download/");
         downloadBtn.gameObject.SetActive(false);
         applyBtn.gameObject.SetActive(false);
         checkBtn.onClick.AddListener(OnClickCheckUpdate);
