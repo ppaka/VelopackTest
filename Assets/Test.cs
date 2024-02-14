@@ -25,9 +25,12 @@ public class Test : MonoBehaviour
         _mgr = new UpdateManager("https://github.com/ppaka/VelopackTest/releases/latest");
         downloadBtn.gameObject.SetActive(false);
         applyBtn.gameObject.SetActive(false);
+        checkBtn.onClick.AddListener(OnClickCheckUpdate);
+        downloadBtn.onClick.AddListener(OnClickDownloadUpdate);
+        applyBtn.onClick.AddListener(OnClickApplyUpdate);
     }
 
-    public async void OnClickCheckUpdate()
+    private async void OnClickCheckUpdate()
     {
         checkBtn.gameObject.SetActive(false);
         
@@ -44,8 +47,8 @@ public class Test : MonoBehaviour
         
         downloadBtn.gameObject.SetActive(true);
     }
-    
-    public async void OnClickDownloadUpdate()
+
+    private async void OnClickDownloadUpdate()
     {
         downloadBtn.gameObject.SetActive(false);
         Debug.Log("Downloading");
