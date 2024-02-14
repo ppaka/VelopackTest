@@ -1,35 +1,67 @@
-using System.Threading.Tasks;
+using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 using Velopack;
 
 public class Test : MonoBehaviour
 {
-    private void Start()
+    private UpdateManager _mgr;
+    public TMP_Text stateText;
+    public TMP_Text versionText;
+    private const string TextBase = "Current State: ";
+    private UpdateInfo _newVersion;
+
+    public Button checkBtn, downloadBtn, applyBtn;
+    
+    private void Awake()
     {
         VelopackApp.Build().Run();
-        Debug.Log(Application.version);
-        Task.Run(UpdateMyApp);
     }
-    
-    private static async Task UpdateMyApp()
-    {
-        var mgr = new UpdateManager("https://github.com/ppaka/VelopackTest/releases/latest");
 
-        // check for new version
+    private void Start()
+    {
+        Debug.Log(Application.version);
+        versionText.SetText(Application.version);
+        _mgr = new UpdateManager("https://github.com/ppaka/VelopackTest/releases/latest");
+        downloadBtn.gameObject.SetActive(false);
+        applyBtn.gameObject.SetActive(false);
+    }
+
+    public async void OnClickCheckUpdate()
+    {
+        checkBtn.gameObject.SetActive(false);
+        
         Debug.Log("Checking");
-        var newVersion = await mgr.CheckForUpdatesAsync();
-        if (newVersion == null)
+        stateText.SetText(TextBase+"Checking");
+        _newVersion = await _mgr.CheckForUpdatesAsync();
+        if (_newVersion == null)
         {
             Debug.Log("No Update available");
-            return; // no update available
+            stateText.SetText(TextBase+"No Update available!");
+            checkBtn.gameObject.SetActive(true);
+            return;
         }
-
-        // download new version
+        
+        downloadBtn.gameObject.SetActive(true);
+    }
+    
+    public async void OnClickDownloadUpdate()
+    {
+        downloadBtn.gameObject.SetActive(false);
         Debug.Log("Downloading");
-        await mgr.DownloadUpdatesAsync(newVersion);
-
+        stateText.SetText(TextBase+"Downloading");
+        await _mgr.DownloadUpdatesAsync(_newVersion, i =>
+        {
+            stateText.SetText(TextBase+$"Download:{i}%");
+        });
+        
+        applyBtn.gameObject.SetActive(true);
+    }
+    
+    private void OnClickApplyUpdate()
+    {
         // install new version and restart app
-        Debug.Log("Restarting");
-        mgr.ApplyUpdatesAndRestart();
+        Debug.Log("Applying");
+        _mgr.ApplyUpdatesAndRestart(_newVersion);
     }
 }
