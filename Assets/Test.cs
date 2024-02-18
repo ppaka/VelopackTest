@@ -2,6 +2,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 using Velopack;
+using Velopack.Sources;
 
 public class Test : MonoBehaviour
 {
@@ -22,7 +23,8 @@ public class Test : MonoBehaviour
     {
         Debug.Log(Application.version);
         versionText.SetText(Application.version);
-        _mgr = new UpdateManager("https://github.com/ppaka/VelopackTest/releases/latest/download/");
+        // _mgr = new UpdateManager("https://github.com/ppaka/VelopackTest/releases/latest/download/");
+        _mgr = new UpdateManager(new GithubSource("https://github.com/ppaka/VelopackTest", null, false));
         downloadBtn.gameObject.SetActive(false);
         applyBtn.gameObject.SetActive(false);
         checkBtn.onClick.AddListener(OnClickCheckUpdate);
