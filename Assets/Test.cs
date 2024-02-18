@@ -47,6 +47,8 @@ public class Test : MonoBehaviour
             return;
         }
         
+        Debug.Log("New Update founded");
+        stateText.SetText(TextBase+"New Update founded!");
         downloadBtn.gameObject.SetActive(true);
     }
 
